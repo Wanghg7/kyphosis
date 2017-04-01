@@ -5,8 +5,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by wanghg on 1/4/2017.
@@ -110,17 +109,19 @@ public class UnicodeTest {
 
     @Test
     public void testRegexWithGc() {
-        assertTrue("a".matches("\\p{gc=Ll}"));
-        assertTrue("apple".matches("\\p{gc=Ll}+"));
-        assertTrue("A".matches("\\p{gc=Lu}"));
-        assertTrue("APPLE".matches("\\p{gc=Lu}+"));
-        assertTrue("Apple".matches("\\p{gc=Lu}\\p{gc=Ll}+"));
-        assertTrue("ApPle".matches("[\\p{gc=Lu}\\p{gc=Ll}]+"));
-        assertTrue("琅琊".matches("[\\p{gc=Lo}]+"));
-        assertTrue("🍎".matches("\\p{gc=So}"));
-        assertTrue("a🌞Z".matches("a\\p{gc=So}Z"));
-        assertTrue("🍎🌞🍷".matches("\\p{gc=So}\\p{gc=So}\\p{gc=So}"));
-        assertTrue("🍎本🍷末🌞".matches("[\\p{gc=Lo}\\p{gc=So}]+"));
+        assertTrue("a".matches("\\p{Ll}"));
+        assertFalse("_a_".matches("\\p{Ll}"));
+        assertTrue("apple".matches("\\p{Ll}+"));
+        assertTrue("A".matches("\\p{Lu}"));
+        assertTrue("APPLE".matches("\\p{Lu}+"));
+        assertTrue("Apple".matches("\\p{Lu}\\p{Ll}+"));
+        assertTrue("ApPle".matches("[\\p{Lu}\\p{Ll}]+"));
+        assertTrue("琅琊".matches("[\\p{Lo}]+"));
+        assertTrue("🍎".matches("\\p{So}"));
+        assertTrue("a🌞Z".matches("a\\p{So}Z"));
+        assertTrue("🍎🌞🍷".matches("\\p{So}\\p{So}\\p{So}"));
+        assertTrue("🍎本🍷末🌞".matches("[\\p{Lo}\\p{So}]+"));
+        assertTrue("🍎本🍷末🌞".matches("[\\p{gc=Lo}\\p{gc=So}]{5}"));
     }
 }
 
