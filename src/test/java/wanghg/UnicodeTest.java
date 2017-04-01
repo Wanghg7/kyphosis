@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by wanghg on 1/4/2017.
@@ -88,13 +89,38 @@ public class UnicodeTest {
         System.out.println("\u01c2");
         assertEquals("Nl", map.get(Byte.valueOf((byte) Character.getType('\u2163'))));
         System.out.println("\u2163");
-        //
-        String s = "王🍎";
+        // 🍎 U+1F34E
+        // 🌞 U+1F31E
+        // 🍷 U+1F377
+        StringBuilder sb = new StringBuilder("王");
+        sb.append(Character.toChars(0x1f34e));
+        sb.append(Character.toChars(0x1f31e));
+        sb.append(Character.toChars(0x1f377));
+        String s = sb.toString();
         int n = s.codePointCount(0, s.length());
-        for (int i = 0; i < n; i++) {
+        System.out.printf("n = %d\n", n);
+        for (int i = 0; i < s.length(); ) {
             int cp = s.codePointAt(i);
-            System.out.printf("%8x: %s %8s\n", cp, String.valueOf(Character.toChars(cp)),
+            char[] chars = Character.toChars(cp);
+            System.out.printf("%8x: %s %8s\n", cp, String.valueOf(chars),
                     map.get(Byte.valueOf((byte) Character.getType(cp))));
+            i += chars.length;
         }
     }
+
+    @Test
+    public void testRegexWithGc() {
+        assertTrue("a".matches("\\p{gc=Ll}"));
+        assertTrue("apple".matches("\\p{gc=Ll}+"));
+        assertTrue("A".matches("\\p{gc=Lu}"));
+        assertTrue("APPLE".matches("\\p{gc=Lu}+"));
+        assertTrue("Apple".matches("\\p{gc=Lu}\\p{gc=Ll}+"));
+        assertTrue("ApPle".matches("[\\p{gc=Lu}\\p{gc=Ll}]+"));
+        assertTrue("琅琊".matches("[\\p{gc=Lo}]+"));
+        assertTrue("🍎".matches("\\p{gc=So}"));
+        assertTrue("a🌞Z".matches("a\\p{gc=So}Z"));
+        assertTrue("🍎🌞🍷".matches("\\p{gc=So}\\p{gc=So}\\p{gc=So}"));
+        assertTrue("🍎本🍷末🌞".matches("[\\p{gc=Lo}\\p{gc=So}]+"));
+    }
 }
+
