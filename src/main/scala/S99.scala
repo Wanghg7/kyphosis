@@ -120,35 +120,6 @@ object S99 extends App {
   assert(true == isPalindrome2(List(1, 1), Nil, Nil))
   assert(true == isPalindrome2(List(1, 1, 1), Nil, Nil))
 
-  def isPalindrome3(stack: List[(List[_], List[_], List[_], Boolean)]): List[(List[_], List[_], List[_], Boolean)] = {
-    //    case (Nil, Nil, Nil, _) :: frame :: rest => frame.copy(_4 = _) :: rest
-    stack match {
-      //      case (Nil, Nil, _) => true
-      case (Nil, Nil, _, _) :: frame :: rest => frame.copy(_4 = true) :: rest
-      //      case (Nil, _ :: _, _) => false
-      case (Nil, _ :: _, _, _) :: frame :: rest => frame.copy(_4 = false) :: rest
-      //      case (x :: xs, Nil, Nil) =>
-      //        isPalindrome(xs, Nil, x :: Nil) ||
-      //          isPalindrome(xs, x :: Nil, Nil)
-      case (x :: xs, Nil, Nil, _) :: frame :: rest =>
-
-      //      case (_ :: _, Nil, _ :: _) => false
-      //      case (x :: xs, y :: ys, _) =>
-      //        isPalindrome(xs, init, x :: fold) ||
-      //          x == y && isPalindrome(xs, ys, x :: fold) ||
-      //          isPalindrome(xs, x :: init, fold)
-    }
-  }
-
-  assert(true == isPalindrome3((List(1, 2, 3, 2, 1), Nil, Nil, false) :: (Nil, Nil, Nil, false) :: Nil))
-  //  assert(false == isPalindrome3(List(1, 2, 3, 2, 1, 3), Nil, Nil))
-  //  assert(true == isPalindrome3(List(1, 2, 3, 2, 1, 3, 1, 2, 3, 2, 1), Nil, Nil))
-  //  assert(true == isPalindrome3(List(1, 2, 3, 3, 2, 1), Nil, Nil))
-  //  assert(true == isPalindrome3(List(), Nil, Nil))
-  //  assert(true == isPalindrome3(List(1), Nil, Nil))
-  //  assert(true == isPalindrome3(List(1, 1), Nil, Nil))
-  //  assert(true == isPalindrome3(List(1, 1, 1), Nil, Nil))
-
   //  P07 (**) Flatten a nested list structure.
   //  Example:
   //    scala> flatten(List(List(1, 1), 2, List(3, List(5, 8))))
