@@ -122,6 +122,10 @@ public class UnicodeTest {
         assertTrue("🍎🌞🍷".matches("\\p{So}\\p{So}\\p{So}"));
         assertTrue("🍎本🍷末🌞".matches("[\\p{Lo}\\p{So}]+"));
         assertTrue("🍎本🍷末🌞".matches("[\\p{gc=Lo}\\p{gc=So}]{5}"));
+        // ҂  U+0482
+        // 🍎 U+1F34E
+        // 🌞 U+1F31E
+        assertTrue("🍎҂🌞".matches("\\p{So}{1,3}}"));
     }
 }
 
