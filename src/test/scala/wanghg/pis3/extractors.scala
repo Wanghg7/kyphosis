@@ -67,5 +67,35 @@ class ExtractorsTest {
     }
   }
 
+  @Test
+  def testRegex: Unit = {
+    val regex = "([^@]+)@([^@]+)".r
+    "harry.potter@hogwarts.edu" match {
+      case regex(name, domain) =>
+        assertEquals("harry.potter", name)
+        assertEquals("hogwarts.edu", domain)
+      case _ =>
+        assertTrue(false)
+    }
+    val regex2 = """([^@]+)@([^@.]+(\.([^@.]+))+)""".r
+    "harry.potter@hogwarts.edu.cn" match {
+      case regex2(name, domain, temp, top) =>
+        assertEquals("harry.potter", name)
+        assertEquals("hogwarts.edu.cn", domain)
+        assertEquals(".cn", temp)
+        assertEquals("cn", top)
+      case _ =>
+        assertTrue(false)
+    }
+    // DOES NOT WORK:
+    //    "harry.potter@hogwarts.edu" match {
+    //      case ("([^@]+)@([^@]+)".r)(name, domain) =>
+    //        assertEquals("harry.potter", name)
+    //        assertEquals("hogwarts.edu", domain)
+    //      case _ =>
+    //        assertTrue(false)
+    //    }
+  }
+
 }
 
