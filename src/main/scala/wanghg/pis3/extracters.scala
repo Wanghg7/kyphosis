@@ -2,9 +2,6 @@ package wanghg.pis3
 
 import java.util.regex.Pattern
 
-/**
-  * Created by wanghg on 2/4/2017.
-  */
 object EMail extends ((String, String) => String) {
 
   private val PTN = Pattern.compile("([^@]+)@([^@]+)")
@@ -20,3 +17,21 @@ object EMail extends ((String, String) => String) {
   }
 
 }
+
+object Twice extends (String => String) {
+
+  def apply(s: String): String = s + s
+
+  def unapply(s: String): Option[String] = s.splitAt(s.length() / 2) match {
+    case (leading, trailing) if leading == trailing => Some(leading)
+    case _ => None
+  }
+
+}
+
+object Uppercase {
+
+  def unapply(s: String): Boolean = s.toUpperCase() == s
+
+}
+
