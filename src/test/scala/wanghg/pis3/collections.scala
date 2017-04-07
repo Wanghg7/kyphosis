@@ -400,5 +400,78 @@ class CollectionTest {
     assertEquals(Seq(1, 2, 3, 'w, 5, 6, 7), seq)
   }
 
+  @Test
+  def test_sorted(): Unit = {
+    val seq = Seq(1, 9, 2, 8, 3, 7)
+    assertEquals(Seq(1, 2, 3, 7, 8, 9), seq.sorted)
+  }
+
+  @Test
+  def test_sortWith(): Unit = {
+    val seq = Seq((1, 'd'), (9, 'a'), (2, 'c'), (8, 'b'))
+    assertEquals(Seq((1, 'd'), (2, 'c'), (8, 'b'), (9, 'a')), seq.sortWith(_._1 < _._1))
+    assertEquals(Seq((1, 'd'), (2, 'c'), (8, 'b'), (9, 'a')), seq.sortWith(_._2 > _._2))
+  }
+
+  @Test
+  def test_sortBy(): Unit = {
+    val seq = Seq("One", "Four", "Two", "Three")
+    assertEquals(Seq("Four", "One", "Three", "Two"), seq.sorted)
+    assertEquals(Seq("One", "Two", "Three", "Four"), seq.sortBy({
+      case "One" => 1
+      case "Two" => 2
+      case "Three" => 3
+      case "Four" => 4
+    }))
+  }
+
+  @Test
+  def test_reverse(): Unit = {
+    val seq = Seq(1, 2, 3)
+    assertEquals(Seq(3, 2, 1), seq.reverse)
+  }
+
+  @Test
+  def test_reverseIterator(): Unit = {
+    val rit = Seq(1, 2, 3).reverseIterator
+    assertEquals(3, rit.next)
+    assertEquals(2, rit.next)
+    assertEquals(1, rit.next)
+    assertEquals(false, rit.hasNext)
+  }
+
+  @Test
+  def test_reverseMap(): Unit = {
+    val seq = Seq(1, 2, 3)
+    assertEquals(Seq(6, 4, 2), seq.reverseMap(_ * 2))
+  }
+
+  @Test
+  def test_startsWith(): Unit = {
+    val seq = Seq('a, 'b, 'c, 'a, 'b, 'c, 'd)
+    assertEquals(true, seq.startsWith(Seq('a, 'b)))
+    assertEquals(false, seq.startsWith(Seq('c, 'd)))
+  }
+
+  @Test
+  def test_endsWith(): Unit = {
+    val seq = Seq('a, 'b, 'c, 'a, 'b, 'c, 'd)
+    assertEquals(false, seq.endsWith(Seq('a, 'b)))
+    assertEquals(true, seq.endsWith(Seq('c, 'd)))
+  }
+
+  @Test
+  def test_corresponds(): Unit = {
+    assertEquals(true, (Seq() corresponds Seq()) ((_, _) => true))
+    assertEquals(true, (Seq() corresponds Seq()) ((_, _) => false))
+    assertEquals(false, (Seq(1, 2, 3) corresponds Seq()) ((_, _) => true))
+    assertEquals(false, (Seq() corresponds Seq(1, 2, 3)) ((_, _) => true))
+    assertEquals(false, (Seq(1, 2) corresponds Seq(1, 2, 3)) ((_, _) => true))
+    assertEquals(false, (Seq(1, 2, 3) corresponds Seq(1, 2)) ((_, _) => true))
+    assertEquals(true, (Seq(1, 9, 3, 7) corresponds Seq(8, 0, 6, 2)) (_ + _ == 9))
+    assertEquals(false, (Seq(1, 9, 3, 7, 5) corresponds Seq(8, 0, 6, 2)) (_ + _ == 9))
+    assertEquals(false, (Seq(1, 9, 3, 7) corresponds Seq(8, 0, 6, 2, 5)) (_ + _ == 9))
+  }
+
 }
 
