@@ -4,6 +4,7 @@ import org.junit.Assert._
 import org.junit.Test
 
 import scala.collection.immutable.HashSet
+import scala.collection.mutable
 
 class CollectionTest {
 
@@ -198,6 +199,74 @@ class CollectionTest {
   def test_filterNot(): Unit = {
     val list = List(1, 2, 3, 0, -4, 0, 5)
     assertEquals(List(0, -4, 0), list.filterNot(_ > 0))
+  }
+
+  @Test
+  def test_iterator(): Unit = {
+    val it = Iterable(1, 2, 3, 4, 5).iterator
+    assertEquals(1, it.next)
+    assertEquals(2, it.next)
+    assertEquals(3, it.next)
+    assertEquals(4, it.next)
+    assertEquals(5, it.next)
+    assertEquals(false, it.hasNext)
+  }
+
+  @Test
+  def test_grouped(): Unit = {
+    val git = Iterable(1, 2, 3, 4, 5).grouped(3)
+    assertEquals(List(1, 2, 3), git.next)
+    assertEquals(List(4, 5), git.next)
+    assertEquals(false, git.hasNext)
+  }
+
+  @Test
+  def test_sliding(): Unit = {
+    val sit = Iterable(1, 2, 3, 4, 5).sliding(3)
+    assertEquals(List(1, 2, 3), sit.next)
+    assertEquals(List(2, 3, 4), sit.next)
+    assertEquals(List(3, 4, 5), sit.next)
+    assertEquals(false, sit.hasNext)
+  }
+
+  @Test
+  def test_takeRight(): Unit = {
+    val sub = Iterable(1, 2, 3, 4, 5).takeRight(3)
+    assertEquals(List(3, 4, 5), sub)
+  }
+
+  @Test
+  def test_dropRight(): Unit = {
+    val sub = Iterable(1, 2, 3, 4, 5).dropRight(3)
+    assertEquals(List(1, 2), sub)
+  }
+
+  @Test
+  def test_zip(): Unit = {
+    val zipped = Iterable(1, 2, 3) zip Iterable('a, 'b, 'c, 'd, 'e, 'f)
+    assertEquals(List((1, 'a), (2, 'b), (3, 'c)), zipped)
+  }
+
+  @Test
+  def test_zipAll(): Unit = {
+    val zipped = Iterable(1, 2, 3) zipAll(Iterable('a, 'b, 'c, 'd, 'e, 'f), 0, 'x)
+    assertEquals(List((1, 'a), (2, 'b), (3, 'c), (0, 'd), (0, 'e), (0, 'f)), zipped)
+    val zipped2 = Iterable(1, 2, 3, 4, 5, 6) zipAll(Iterable('a, 'b, 'c, 'd), 0, 'x)
+    assertEquals(List((1, 'a), (2, 'b), (3, 'c), (4, 'd), (5, 'x), (6, 'x)), zipped2)
+  }
+
+  @Test
+  def test_zipWithIndex(): Unit = {
+    val zipped = Iterable('a, 'b, 'c, 'd, 'e, 'f).zipWithIndex
+    assertEquals(List(('a, 0), ('b, 1), ('c, 2), ('d, 3), ('e, 4), ('f, 5)), zipped)
+  }
+
+  @Test
+  def test_sameElements(): Unit = {
+    val lh = List(1, 2, 3, 4, 5)
+    val rh = mutable.LinkedHashSet(1, 2, 3, 4, 5)
+    assertNotEquals(lh, rh)
+    assertEquals(true, lh sameElements rh)
   }
 
 }
