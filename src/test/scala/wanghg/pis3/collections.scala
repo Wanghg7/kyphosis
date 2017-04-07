@@ -473,5 +473,47 @@ class CollectionTest {
     assertEquals(false, (Seq(1, 9, 3, 7) corresponds Seq(8, 0, 6, 2, 5)) (_ + _ == 9))
   }
 
+  @Test
+  def test_intersect(): Unit = {
+    assertEquals(Seq(), Seq(1, 2, 3) intersect Seq(4, 5, 6))
+    assertEquals(Seq(3, 4), Seq(1, 2, 3, 4) intersect Seq(3, 4, 5, 6))
+    assertEquals(Seq(3, 4), Seq(1, 2, 3, 4) intersect Seq(3, 4, 5, 6).reverse)
+    assertEquals(Seq('a, 'b, 3, 4), Seq('a, 'b, 1, 2, 3, 4) intersect Seq(3, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq('a, 'b, 3, 4), Seq('a, 'b, 1, 2, 3, 4) intersect Seq(3, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq('b, 3, 'a, 4), Seq('b, 1, 2, 3, 'a, 4) intersect Seq(3, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq('b, 3, 'a, 4), Seq('b, 1, 2, 3, 'a, 4) intersect Seq(3, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq('a, 'b, 3, 4), Seq('a, 'b, 1, 2, 3, 'a, 4) intersect Seq(3, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq('a, 'b, 3, 4), Seq('a, 'b, 1, 2, 3, 'a, 4) intersect Seq(3, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq('a, 'b, 3, 'a, 4), Seq('a, 'b, 1, 2, 3, 'a, 4) intersect Seq(3, 'a, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq('a, 'b, 3, 'a, 4), Seq('a, 'b, 1, 2, 3, 'a, 4) intersect Seq(3, 'a, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq('a, 'b, 3, 'a, 4), Seq('a, 'b, 1, 2, 3, 'a, 4) intersect Seq(3, 4, 5, 'a, 6, 'a, 'b))
+  }
+
+  @Test
+  def test_diff(): Unit = {
+    assertEquals(Seq(1, 2, 3), Seq(1, 2, 3) diff Seq(4, 5, 6))
+    assertEquals(Seq(1, 2), Seq(1, 2, 3, 4) diff Seq(3, 4, 5, 6))
+    assertEquals(Seq(1, 2), Seq(1, 2, 3, 4) diff Seq(3, 4, 5, 6).reverse)
+    assertEquals(Seq(1, 2), Seq('a, 'b, 1, 2, 3, 4) diff Seq(3, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq(1, 2), Seq('a, 'b, 1, 2, 3, 4) diff Seq(3, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq(1, 2), Seq('b, 1, 2, 3, 'a, 4) diff Seq(3, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq(1, 2), Seq('b, 1, 2, 3, 'a, 4) diff Seq(3, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq(1, 2, 'a), Seq('a, 'b, 1, 2, 3, 'a, 4) diff Seq(3, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq(1, 2, 'a), Seq('a, 'b, 1, 2, 3, 'a, 4) diff Seq(3, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq(1, 2), Seq('a, 'b, 1, 2, 3, 'a, 4) diff Seq(3, 'a, 4, 5, 6, 'a, 'b))
+    assertEquals(Seq(1, 2), Seq('a, 'b, 1, 2, 3, 'a, 4) diff Seq(3, 'a, 4, 5, 6, 'a, 'b).reverse)
+    assertEquals(Seq(2, 1, 'a), Seq('a, 'b, 2, 1, 3, 'a, 4) diff Seq(3, 4, 5, 'a, 6, 'b))
+  }
+
+  @Test
+  def test_union(): Unit = {
+    assertEquals(Seq('a, 'b, 1, 2, 3, 4, 3, 4, 5, 6, 'a, 'b), Seq('a, 'b, 1, 2, 3, 4) union Seq(3, 4, 5, 6, 'a, 'b))
+  }
+
+  @Test
+  def test_distinct(): Unit = {
+    assertEquals(Seq('a, 'b, 1, 2, 3, 4, 5, 6), Seq('a, 'b, 1, 2, 3, 4, 3, 4, 5, 6, 'a, 'b).distinct)
+  }
+
 }
 
