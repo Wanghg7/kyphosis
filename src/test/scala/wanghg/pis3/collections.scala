@@ -515,5 +515,89 @@ class CollectionTest {
     assertEquals(Seq('a, 'b, 1, 2, 3, 4, 5, 6), Seq('a, 'b, 1, 2, 3, 4, 3, 4, 5, 6, 'a, 'b).distinct)
   }
 
+  @Test
+  def test_+=(): Unit = {
+    assertEquals(mutable.Buffer(1, 2, 3, 0), mutable.Buffer(1, 2, 3) += 0)
+    assertEquals(mutable.Buffer(1, 2, 3, 0, 1, 2), mutable.Buffer(1, 2, 3) += (0, 1, 2))
+  }
+
+  @Test
+  def test_++=(): Unit = {
+    assertEquals(mutable.Buffer(1, 2, 3, 0, 1, 2), mutable.Buffer(1, 2, 3) ++= mutable.Buffer(0, 1, 2))
+  }
+
+  @Test
+  def test_+=:(): Unit = {
+    assertEquals(mutable.Buffer(0, 1, 2, 3), 0 +=: mutable.Buffer(1, 2, 3))
+  }
+
+  @Test
+  def test_++=:(): Unit = {
+    assertEquals(mutable.Buffer(0, 1, 2, 1, 2, 3), List(0, 1, 2) ++=: mutable.Buffer(1, 2, 3))
+  }
+
+  @Test
+  def test_insert(): Unit = {
+    val buf = mutable.Buffer(1, 2)
+    buf insert(1, 3)
+    assertEquals(mutable.Buffer(1, 3, 2), buf)
+  }
+
+  @Test
+  def test_insertAll(): Unit = {
+    val buf = mutable.Buffer(1, 2)
+    buf insertAll(1, List(3, 4, 5))
+    assertEquals(mutable.Buffer(1, 3, 4, 5, 2), buf)
+  }
+
+  @Test
+  def test_-=(): Unit = {
+    val buf = mutable.Buffer(1, 2, 1, 2, 3)
+    buf -= 2
+    assertEquals(List(1, 1, 2, 3), buf)
+  }
+
+  @Test
+  def test_remove(): Unit = {
+    var buf = mutable.Buffer(1, 2, 1, 2, 3)
+    buf remove 1
+    buf remove 1
+    assertEquals(List(1, 2, 3), buf)
+    //
+    buf = mutable.Buffer(1, 2, 1, 2, 3)
+    buf remove(1, 2)
+    assertEquals(List(1, 2, 3), buf)
+  }
+
+  @Test
+  def test_trimStart(): Unit = {
+    val buf = mutable.Buffer('a, 'b, 1, 2, 3, 'c, 'd, 'e)
+    buf trimStart 2
+    assertEquals(List(1, 2, 3, 'c, 'd, 'e), buf)
+  }
+
+  @Test
+  def test_trimEnd(): Unit = {
+    val buf = mutable.Buffer('a, 'b, 1, 2, 3, 'c, 'd, 'e)
+    buf trimEnd 3
+    assertEquals(List('a, 'b, 1, 2, 3), buf)
+  }
+
+  @Test
+  def test_clear(): Unit = {
+    val buf = mutable.Buffer('a, 'b, 1, 2, 3, 'c, 'd, 'e)
+    buf.clear()
+    assertEquals(List(), buf)
+  }
+
+  @Test
+  def test_clone(): Unit = {
+    val buf = mutable.Buffer(1, 2, 3)
+    val buf2 = buf.clone()
+    buf.clear()
+    assertEquals(List(), buf)
+    assertEquals(List(1, 2, 3), buf2)
+  }
+
 }
 
