@@ -269,5 +269,136 @@ class CollectionTest {
     assertEquals(true, lh sameElements rh)
   }
 
+  @Test
+  def test_apply(): Unit = {
+    val seq = Seq('a, 'b, 'c)
+    assertEquals('b, seq(1))
+    assertEquals('b, seq apply 1)
+    assertEquals('b, seq.apply(1))
+  }
+
+  @Test
+  def test_isDefinedAt(): Unit = {
+    val seq = Seq('a, 'b, 'c)
+    assertEquals(true, seq.isDefinedAt(1))
+    assertEquals(false, seq.isDefinedAt(3))
+  }
+
+  @Test
+  def test_length(): Unit = {
+    val seq = Seq('a, 'b, 'c)
+    assertEquals(3, seq.length)
+    assertEquals(3, seq.size)
+  }
+
+  @Test
+  def test_lengthCompare(): Unit = {
+    val a: Seq[Int] = Stream.from(0)
+    val b = Seq('a, 'b, 'c)
+    assertEquals(0, b.lengthCompare(3))
+    assertEquals(-1, b.lengthCompare(4))
+    assertEquals(1, b.lengthCompare(2))
+    assertEquals(1, a.lengthCompare(4321))
+  }
+
+  @Test
+  def test_indices(): Unit = {
+    val seq = Seq(1, 2, 3, 4, 5)
+    assertEquals(0 to 4, seq.indices)
+  }
+
+  @Test
+  def test_indexOf(): Unit = {
+    val seq = Seq('a, 'b, 'c, 'a, 'b, 'c, 'd)
+    assertEquals(1, seq.indexOf('b))
+  }
+
+  @Test
+  def test_lastIndexOf(): Unit = {
+    val seq = Seq('a, 'b, 'c, 'a, 'b, 'c, 'd)
+    assertEquals(4, seq.lastIndexOf('b))
+  }
+
+  @Test
+  def test_indexOfSlice(): Unit = {
+    val seq = Seq('a, 'b, 'c, 'a, 'b, 'c, 'd)
+    assertEquals(1, seq.indexOfSlice(List('b, 'c)))
+    assertEquals(5, seq.indexOfSlice(List('c, 'd)))
+  }
+
+  @Test
+  def test_lastIndexOfSlice(): Unit = {
+    val seq = Seq('a, 'b, 'c, 'a, 'b, 'c, 'd)
+    assertEquals(4, seq.lastIndexOfSlice(List('b, 'c)))
+  }
+
+  @Test
+  def test_indexWhere(): Unit = {
+    val seq = Seq(0, 1, -1, 2, 3, 4, -1, 5, 6)
+    assertEquals(2, seq.indexWhere(_ < 0))
+  }
+
+  @Test
+  def test_segmentLength(): Unit = {
+    val seq = Seq(0, 1, -1, 2, 3, 4, -1, 5, 6)
+    assertEquals(2, seq.segmentLength(_ >= 0, 0))
+    assertEquals(0, seq.segmentLength(_ > 0, 2))
+    assertEquals(3, seq.segmentLength(_ > 0, 3))
+  }
+
+  @Test
+  def test_prefixLength(): Unit = {
+    val seq = Seq(0, 1, -1, 2, 3, 4, -1, 5, 6)
+    assertEquals(0, seq.prefixLength(_ > 0))
+    assertEquals(2, seq.prefixLength(_ >= 0))
+    assertEquals(3, seq.prefixLength(_ < 2))
+  }
+
+  @Test
+  def test_:+(): Unit = {
+    val seq: Seq[Int] = Seq(1, 2, 3)
+    val expected: Seq[Any] = Seq(1, 2, 3, 'a)
+    assertEquals(expected, seq :+ 'a)
+  }
+
+  @Test
+  def test_+:(): Unit = {
+    val seq: Seq[Int] = Seq(1, 2, 3)
+    val expected: Seq[Any] = Seq('a, 1, 2, 3)
+    assertEquals(expected, 'a +: seq)
+  }
+
+  @Test
+  def test_padTo(): Unit = {
+    val seq = Seq(1, 2, 3, 4, 5)
+    val expected = Seq(1, 2, 3, 4, 5, 0, 0)
+    assertEquals(expected, seq padTo(7, 0))
+  }
+
+  @Test
+  def test_patch(): Unit = {
+    val seq = Seq(1, 2, 3, 4, 5, 6, 7)
+    val patch = Seq('a, 'b, 'c, 'd)
+    val expected = Seq(1, 2, 'a, 'b, 'c, 'd, 6, 7)
+    assertEquals(expected, seq.patch(2, patch, 3))
+    assertEquals(Seq(1, 2, 6, 7), seq.patch(2, Seq(), 3))
+    assertEquals(Seq(1, 2, 'a, 'b, 'c, 3, 4, 5, 6, 7), seq.patch(2, Seq('a, 'b, 'c), 0))
+  }
+
+  @Test
+  def test_updated(): Unit = {
+    val seq = Seq(1, 2, 3, 4, 5, 6, 7)
+    assertEquals(Seq(1, 2, 3, 'x, 5, 6, 7), seq.updated(3, 'x))
+  }
+
+  @Test
+  def test_update(): Unit = {
+    val seq = mutable.Seq[Any](1, 2, 3, 4, 5, 6, 7)
+    seq.update(3, 'x)
+    assertEquals(Seq(1, 2, 3, 'x, 5, 6, 7), seq)
+    seq(3) = 'w
+    assertEquals(Seq(1, 2, 3, 'w, 5, 6, 7), seq)
+  }
+
 }
 
