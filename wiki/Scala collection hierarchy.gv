@@ -32,6 +32,10 @@ digraph {
             "scala.collection.Parallelizable"                   [shape=ellipse,label="Parallelizable"]
             "scala.collection.TraversableLike"                  [shape=ellipse,label="TraversableLike"]
             "scala.collection.TraversableOnce"                  [shape=ellipse,label="TraversableOnce"]
+            "scala.collection.Iterable"                         [shape=ellipse,label="Iterable"]
+            "scala.collection.GenIterable"                      [shape=ellipse,label="GenIterable"]
+            "scala.collection.GenIterableLike"                  [shape=ellipse,label="GenIterableLike"]
+            "scala.collection.IterableLike"                     [shape=ellipse,label="IterableLike"]
 
             subgraph "cluster:mutable" {
 
@@ -262,6 +266,13 @@ digraph {
             "scala.collection.TraversableLike"                          -> "scala.collection.TraversableOnce" [style=dashed]
             "scala.collection.TraversableOnce"                          -> "scala.collection.GenTraversableOnce" [style=dashed]
             "scala.collection.Traversable"                              -> "scala.collection.TraversableOnce" [style=dashed]
+            "scala.collection.Iterable"                                 -> "scala.collection.generic.GenericTraversableTemplate"  [style=dashed]
+            "scala.collection.Iterable"                                 -> "scala.collection.GenIterable"  [style=dashed]
+            "scala.collection.GenIterable"                              -> "scala.collection.generic.GenericTraversableTemplate"  [style=dashed]
+            "scala.collection.GenIterable"                              -> "scala.collection.GenIterableLike" [style=dashed]
+            "scala.collection.GenIterable"                              -> "scala.collection.GenTraversable" [style=dashed]
+            "scala.collection.Iterable"                                 -> "scala.collection.IterableLike" [style=dashed]
+
         }
 
 
