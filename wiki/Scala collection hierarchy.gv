@@ -3,7 +3,7 @@ digraph {
     overlap = false
     edge [style=solid]
     splines = true
-    rankdir = BT
+    rankdir = RL
 
     subgraph "cluster:scala" {
 
@@ -18,6 +18,7 @@ digraph {
             "scala.collection.AbstractTraversable"              [shape=box,label="AbstractTraversable"]
             "scala.collection.AbstractIterable"                 [shape=box,label="AbstractIterable"]
             "scala.collection.AbstractMap"                      [shape=box,label="AbstractMap"]
+            "scala.collection.AbstractSeq"                      [shape=box,label="AbstractSeq"]
 
             subgraph "cluster:mutable" {
 
@@ -45,6 +46,21 @@ digraph {
                 "scala.collection.mutable.ImmutableMapAdaptor"          [shape=box,label="ImmutableMapAdaptor"]
                 "scala.collection.mutable.WeakHashMap"                  [shape=box,label="WeakHashMap"]
                 "scala.collection.mutable.LinkedHashMap"                [shape=box,label="LinkedHashMap"]
+                "scala.collection.mutable.ListMap"                      [shape=box,label="ListMap"]
+                "scala.collection.mutable.LongMap"                      [shape=box,label="LongMap"]
+                "scala.collection.mutable.OpenHashMap"                  [shape=box,label="OpenHashMap"]
+                "scala.collection.mutable.AbstractSeq"                  [shape=box,label="AbstractSeq"]
+                "scala.collection.mutable.AbstractBuffer"               [shape=box,label="AbstractBuffer"]
+                "scala.collection.mutable.ArrayBuffer"                  [shape=box,label="ArrayBuffer"]
+                "scala.collection.mutable.ListBuffer"                   [shape=box,label="ListBuffer"]
+                "scala.collection.mutable.UnrolledBuffer"               [shape=box,label="UnrolledBuffer"]
+                "scala.collection.mutable.DoublingUnrolledBuffer"       [shape=box,label="DoublingUnrolledBuffer"]
+                "scala.collection.mutable.ArraySeq"                     [shape=box,label="ArraySeq"]
+                "scala.collection.mutable.ArrayStack"                   [shape=box,label="ArrayStack"]
+                "scala.collection.mutable.DoubleLinkedList"             [shape=box,label="DoubleLinkedList"]
+                "scala.collection.mutable.LinkedList"                   [shape=box,label="LinkedList"]
+                "scala.collection.mutable.MutableList"                  [shape=box,label="MutableList"]
+                "scala.collection.mutable.Queue"                        [shape=box,label="Queue"]
 
                 "scala.collection.mutable.AbstractSet"                  -> "scala.collection.mutable.AbstractIterable"
                 "scala.collection.mutable.AbstractSortedSet"            -> "scala.collection.mutable.AbstractSet"
@@ -64,6 +80,20 @@ digraph {
                 "scala.collection.mutable.HashMap"                      -> "scala.collection.mutable.AbstractMap"
                 "scala.collection.mutable.ImmutableMapAdaptor"          -> "scala.collection.mutable.AbstractMap"
                 "scala.collection.mutable.LinkedHashMap"                -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.ListMap"                      -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.LongMap"                      -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.OpenHashMap"                  -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.AbstractBuffer"               -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.ArrayBuffer"                  -> "scala.collection.mutable.AbstractBuffer"
+                "scala.collection.mutable.ListBuffer"                   -> "scala.collection.mutable.AbstractBuffer"
+                "scala.collection.mutable.UnrolledBuffer"               -> "scala.collection.mutable.AbstractBuffer"
+                "scala.collection.mutable.DoublingUnrolledBuffer"       -> "scala.collection.mutable.UnrolledBuffer"
+                "scala.collection.mutable.ArraySeq"                     -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.ArrayStack"                   -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.DoubleLinkedList"             -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.LinkedList"                   -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.MutableList"                  -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.Queue"                        -> "scala.collection.mutable.MutableList"
             }
 
             subgraph "cluster:convert" {
@@ -76,6 +106,7 @@ digraph {
                 "scala.collection.convert.Wrappers.JDictionaryWrapper"      [shape=box,label="JDictionaryWrapper"]
                 "scala.collection.convert.Wrappers.JMapWrapper"             [shape=box,label="JMapWrapper"]
                 "scala.collection.convert.Wrappers.JPropertiesWrapper"      [shape=box,label="JPropertiesWrapper"]
+                "scala.collection.convert.Wrappers.JListWrapper"            [shape=box,label="JListWrapper"]
 
             }
 
@@ -97,6 +128,32 @@ digraph {
 
             }
 
+            subgraph "cluster:parallel" {
+
+                label = "parallel"
+                style = "dashed"
+
+                subgraph "cluster:mutable" {
+
+                    label = "mutable"
+                    style = "dashed"
+
+                    "scala.collection.parallel.mutable.ExposedArrayBuffer"  [shape=box,label="ExposedArrayBuffer"]
+                    "scala.collection.parallel.mutable.ExposedArraySeq"     [shape=box,label="ExposedArraySeq"]
+
+                }
+
+            }
+
+            subgraph "cluster:script" {
+
+                label = "script"
+                style = "dashed"
+
+                "scala.collection.script.Script"        [shape=box,label="Script"]
+
+            }
+
             "scala.collection.AbstractIterable"                         -> "scala.collection.AbstractTraversable"
             "scala.collection.mutable.AbstractIterable"                 -> "scala.collection.AbstractIterable"
             "scala.collection.convert.Wrappers.JSetWrapper"             -> "scala.collection.mutable.AbstractSet"
@@ -108,9 +165,25 @@ digraph {
             "scala.collection.convert.Wrappers.JMapWrapper"             -> "scala.collection.mutable.AbstractMap"
             "scala.collection.mutable.WeakHashMap"                      -> "scala.collection.convert.Wrappers.JMapWrapper"
             "scala.collection.convert.Wrappers.JPropertiesWrapper"      -> "scala.collection.mutable.AbstractMap"
+            "scala.collection.AbstractSeq"                              -> "scala.collection.AbstractIterable"
+            "scala.collection.mutable.AbstractSeq"                      -> "scala.collection.AbstractSeq"
+            "scala.collection.parallel.mutable.ExposedArrayBuffer"      -> "scala.collection.mutable.ArrayBuffer"
+            "scala.collection.script.Script"                            -> "scala.collection.mutable.ArrayBuffer"
+            "scala.collection.convert.Wrappers.JListWrapper"            -> "scala.collection.mutable.AbstractBuffer"
+            "scala.collection.parallel.mutable.ExposedArraySeq"      -> "scala.collection.mutable.ArraySeq"
 
         }
 
+
+        subgraph "cluster:sys" {
+
+            label = "sys"
+            style = "dashed"
+
+            "scala.sys.SystemProperties"        [shape=box,label="SystemProperties"]
+        }
+
+        "scala.sys.SystemProperties"            -> "scala.collection.mutable.AbstractMap"
     }
 
 }
