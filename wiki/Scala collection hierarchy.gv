@@ -4,26 +4,33 @@ digraph {
     edge [style=solid]
     splines = true
     rankdir = RL
+    layout = neato
 
     subgraph "cluster:scala" {
 
         label = "scala"
         style = "dashed"
+        node [fontcolor=black,style=solid,color=black]
+
+        "scala.ValueSet"              [shape=box,label="ValueSet"]
 
         subgraph "cluster:collection" {
 
             label = "collection"
             style = "dashed"
+            node [fontcolor=white,style=filled,color=black,fillcolor="#000000"]
 
             "scala.collection.AbstractTraversable"              [shape=box,label="AbstractTraversable"]
             "scala.collection.AbstractIterable"                 [shape=box,label="AbstractIterable"]
             "scala.collection.AbstractMap"                      [shape=box,label="AbstractMap"]
             "scala.collection.AbstractSeq"                      [shape=box,label="AbstractSeq"]
+            "scala.collection.AbstractSet"                      [shape=box,label="AbstractSet"]
 
             subgraph "cluster:mutable" {
 
                 label = "mutable"
                 style = "dashed"
+                node [fontcolor=black,style=filled,fillcolor="#F47142"]
 
                 "scala.collection.mutable.AbstractIterable"             [shape=box,label="AbstractIterable"]
                 "scala.collection.mutable.AbstractSet"                  [shape=box,label="AbstractSet"]
@@ -61,6 +68,13 @@ digraph {
                 "scala.collection.mutable.LinkedList"                   [shape=box,label="LinkedList"]
                 "scala.collection.mutable.MutableList"                  [shape=box,label="MutableList"]
                 "scala.collection.mutable.Queue"                        [shape=box,label="Queue"]
+                "scala.collection.mutable.QueueProxy"                   [shape=component,label="QueueProxy"]
+                "scala.collection.mutable.SynchronizedQueue"            [shape=box,label="SynchronizedQueue"]
+                "scala.collection.mutable.Stack"                        [shape=box,label="Stack"]
+                "scala.collection.mutable.StackProxy"                   [shape=component,label="StackProxy"]
+                "scala.collection.mutable.SynchronizedStack"            [shape=box,label="SynchronizedStack"]
+                "scala.collection.mutable.StringBuilder"                [shape=box,label="StringBuilder"]
+                "scala.collection.mutable.WrappedArray"                 [shape=box,label="WrappedArray"]
 
                 "scala.collection.mutable.AbstractSet"                  -> "scala.collection.mutable.AbstractIterable"
                 "scala.collection.mutable.AbstractSortedSet"            -> "scala.collection.mutable.AbstractSet"
@@ -94,12 +108,20 @@ digraph {
                 "scala.collection.mutable.LinkedList"                   -> "scala.collection.mutable.AbstractSeq"
                 "scala.collection.mutable.MutableList"                  -> "scala.collection.mutable.AbstractSeq"
                 "scala.collection.mutable.Queue"                        -> "scala.collection.mutable.MutableList"
+                "scala.collection.mutable.QueueProxy"                   -> "scala.collection.mutable.Queue"
+                "scala.collection.mutable.SynchronizedQueue"            -> "scala.collection.mutable.Queue"
+                "scala.collection.mutable.Stack"                        -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.StackProxy"                   -> "scala.collection.mutable.Stack"
+                "scala.collection.mutable.SynchronizedStack"            -> "scala.collection.mutable.Stack"
+                "scala.collection.mutable.StringBuilder"                -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.mutable.WrappedArray"                 -> "scala.collection.mutable.AbstractSeq"
             }
 
             subgraph "cluster:convert" {
 
                 label = "convert"
                 style = "dashed"
+                node [fontcolor=black,style=solid,color=black]
 
                 "scala.collection.convert.Wrappers.JSetWrapper"             [shape=box,label="JSetWrapper"]
                 "scala.collection.convert.Wrappers.JConcurrentMapWrapper"   [shape=box,label="JConcurrentMapWrapper"]
@@ -107,6 +129,8 @@ digraph {
                 "scala.collection.convert.Wrappers.JMapWrapper"             [shape=box,label="JMapWrapper"]
                 "scala.collection.convert.Wrappers.JPropertiesWrapper"      [shape=box,label="JPropertiesWrapper"]
                 "scala.collection.convert.Wrappers.JListWrapper"            [shape=box,label="JListWrapper"]
+                "scala.collection.convert.Wrappers.JCollectionWrapper"      [shape=box,label="JCollectionWrapper"]
+                "scala.collection.convert.Wrappers.JIterableWrapper"        [shape=box,label="JIterableWrapper"]
 
             }
 
@@ -114,12 +138,25 @@ digraph {
 
                 label = "immutable"
                 style = "dashed"
+                node [fontcolor=black,style=filled,fillcolor="#41F492"]
 
                 "scala.collection.immutable.AbstractMap"        [shape=box,label="AbstractMap"]
                 "scala.collection.immutable.HashMap"            [shape=box,label="HashMap"]
                 "scala.collection.immutable.IntMap"             [shape=box,label="IntMap"]
                 "scala.collection.immutable.ListMap"            [shape=box,label="ListMap"]
                 "scala.collection.immutable.LongMap"            [shape=box,label="LongMap"]
+                "scala.collection.immutable.List"               [shape=box,label="List"]
+                "scala.collection.immutable.NumericRange"       [shape=box,label="NumericRange"]
+                "scala.collection.immutable.PagedSeq"           [shape=box,label="PagedSeq"]
+                "scala.collection.immutable.Queue"              [shape=box,label="Queue"]
+                "scala.collection.immutable.Range"              [shape=box,label="Range"]
+                "scala.collection.immutable.Stack"              [shape=box,label="Stack"]
+                "scala.collection.immutable.Stream"             [shape=box,label="Stream"]
+                "scala.collection.immutable.Vector"             [shape=box,label="Vector"]
+                "scala.collection.immutable.WrappedString"      [shape=box,label="WrappedString"]
+                "scala.collection.immutable.BitSet"             [shape=box,label="BitSet"]
+                "scala.collection.immutable.HashSet"            [shape=box,label="HashSet"]
+                "scala.collection.immutable.ListSet"            [shape=box,label="ListSet"]
 
                 "scala.collection.immutable.HashMap"            -> "scala.collection.immutable.AbstractMap"
                 "scala.collection.immutable.IntMap"             -> "scala.collection.immutable.AbstractMap"
@@ -132,11 +169,13 @@ digraph {
 
                 label = "parallel"
                 style = "dashed"
+                node [fontcolor=black,style=solid,color=black]
 
                 subgraph "cluster:mutable" {
 
                     label = "mutable"
                     style = "dashed"
+                    node [fontcolor=black,style=solid,color=black]
 
                     "scala.collection.parallel.mutable.ExposedArrayBuffer"  [shape=box,label="ExposedArrayBuffer"]
                     "scala.collection.parallel.mutable.ExposedArraySeq"     [shape=box,label="ExposedArraySeq"]
@@ -149,6 +188,7 @@ digraph {
 
                 label = "script"
                 style = "dashed"
+                node [fontcolor=black,style=solid,color=black]
 
                 "scala.collection.script.Script"        [shape=box,label="Script"]
 
@@ -170,7 +210,22 @@ digraph {
             "scala.collection.parallel.mutable.ExposedArrayBuffer"      -> "scala.collection.mutable.ArrayBuffer"
             "scala.collection.script.Script"                            -> "scala.collection.mutable.ArrayBuffer"
             "scala.collection.convert.Wrappers.JListWrapper"            -> "scala.collection.mutable.AbstractBuffer"
-            "scala.collection.parallel.mutable.ExposedArraySeq"      -> "scala.collection.mutable.ArraySeq"
+            "scala.collection.parallel.mutable.ExposedArraySeq"         -> "scala.collection.mutable.ArraySeq"
+            "scala.collection.immutable.List"                           -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.NumericRange"                   -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.PagedSeq"                       -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.Queue"                          -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.Range"                          -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.Stack"                          -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.Stream"                         -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.Vector"                         -> "scala.collection.AbstractSeq"
+            "scala.collection.immutable.WrappedString"                  -> "scala.collection.AbstractSeq"
+            "scala.collection.AbstractSet"                              -> "scala.collection.AbstractIterable"
+            "scala.collection.immutable.BitSet"                         -> "scala.collection.AbstractSet"
+            "scala.collection.immutable.HashSet"                        -> "scala.collection.AbstractSet"
+            "scala.collection.immutable.ListSet"                        -> "scala.collection.AbstractSet"
+            "scala.collection.convert.Wrappers.JCollectionWrapper"      -> "scala.collection.AbstractIterable"
+            "scala.collection.convert.Wrappers.JIterableWrapper"        -> "scala.collection.AbstractIterable"
 
         }
 
@@ -179,11 +234,14 @@ digraph {
 
             label = "sys"
             style = "dashed"
+            node [fontcolor=black,style=solid,color=black]
 
             "scala.sys.SystemProperties"        [shape=box,label="SystemProperties"]
         }
 
         "scala.sys.SystemProperties"            -> "scala.collection.mutable.AbstractMap"
+        "scala.ValueSet"                        -> "scala.collection.AbstractSet"
+
     }
 
 }
