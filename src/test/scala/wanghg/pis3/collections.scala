@@ -5,6 +5,7 @@ import org.junit.Test
 
 import scala.collection.immutable.HashSet
 import scala.collection.mutable
+import scala.util.control.Breaks.breakable
 
 class CollectionTest {
 
@@ -597,6 +598,420 @@ class CollectionTest {
     buf.clear()
     assertEquals(List(), buf)
     assertEquals(List(1, 2, 3), buf2)
+  }
+
+}
+
+class SetTest {
+
+  @Test
+  def test_contains(): Unit = {
+    val set = Set(1, 2, 3, 4, 5)
+    assertEquals(true, set contains 3)
+    assertEquals(false, set contains 6)
+    // test apply
+    assertEquals(true, set(3))
+    assertEquals(false, set(6))
+  }
+
+  @Test
+  def test_subsetOf(): Unit = {
+    assertEquals(true, Set(1, 3, 5) subsetOf Set(1, 2, 3, 4, 5))
+    assertEquals(false, Set(2, 4, 6) subsetOf Set(1, 2, 3, 4, 5))
+  }
+
+  @Test
+  def test_+(): Unit = {
+    assertEquals(Set(1, 2, 3), Set(1, 2, 3) + 2)
+    assertEquals(Set(1, 2, 3, 4), Set(1, 2, 3) + 4)
+    assertEquals(Set(1, 2, 3, 4), Set(1, 2, 3) + (2, 3, 4))
+  }
+
+  @Test
+  def test_++(): Unit = {
+    assertEquals(Set(1, 2, 3, 4), Set(1, 2, 3) ++ Set(2, 3, 4))
+  }
+
+  @Test
+  def test_-(): Unit = {
+    assertEquals(Set(1, 3), Set(1, 2, 3) - 2)
+    assertEquals(Set(1, 2, 3), Set(1, 2, 3) - 4)
+    assertEquals(Set(1), Set(1, 2, 3) - (2, 3, 4))
+  }
+
+  @Test
+  def test_--(): Unit = {
+    assertEquals(Set(1), Set(1, 2, 3) -- Set(2, 3, 4))
+  }
+
+  @Test
+  def test_empty(): Unit = {
+    val set: Set[Int] = Set(1, 2, 3)
+    val set2: Set[Int] = set.empty
+    val set3 = set.empty + 4 // ASSERT: compilation okay
+    //    val set3: Set[Symbol] = set.empty // ASSERT: compilation error
+    //    val set4 = set.empty + 'a // ASSERT: compilation error
+  }
+
+  @Test
+  def test_&(): Unit = {
+    assertEquals(Set(3), Set(1, 2, 3) & Set(3, 4, 5))
+    assertEquals(Set(3), Set(1, 2, 3) intersect Set(3, 4, 5))
+  }
+
+  @Test
+  def test_|(): Unit = {
+    assertEquals(Set(1, 2, 3, 4, 5), Set(1, 2, 3) | Set(3, 4, 5))
+    assertEquals(Set(1, 2, 3, 4, 5), Set(1, 2, 3) union Set(3, 4, 5))
+  }
+
+  @Test
+  def test_&~(): Unit = {
+    assertEquals(Set(1, 2), Set(1, 2, 3) &~ Set(3, 4, 5))
+    assertEquals(Set(1, 2), Set(1, 2, 3) diff Set(3, 4, 5))
+  }
+
+}
+
+class MutableSetTest {
+
+  /**
+    * xs += x
+    * Adds element x to set xs as a side effect and returns xs itself
+    * xs += (x, y, z)
+    * Adds the given elements to set xs as a side effect and returns xs itself
+    */
+  @Test
+  def test_+=(): Unit = {
+    val set = mutable.Set(1, 2, 3)
+    assertEquals(mutable.Set(1, 2, 3), set += 2)
+    assertEquals(mutable.Set(1, 2, 3), set)
+    assertEquals(mutable.Set(1, 2, 3, 4), set += 4)
+    assertEquals(mutable.Set(1, 2, 3, 4), set)
+    //
+    assertEquals(Set(1, 2, 3, 4, 5), set += (3, 4, 5))
+    assertEquals(Set(1, 2, 3, 4, 5), set)
+  }
+
+  /**
+    * xs ++= ys
+    * Adds all elements in ys to set xs as a side effect and returns xs itself
+    */
+  @Test
+  def test_++=(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4)
+    assertEquals(Set(1, 2, 3, 4, 5), set ++= Set(3, 4, 5))
+    assertEquals(Set(1, 2, 3, 4, 5), set)
+  }
+
+  /**
+    * xs add x
+    * Adds element x to xs and returns true if x was not previously contained in the set,
+    * false if it was previously contained
+    */
+  @Test
+  def test_add(): Unit = {
+    val set = mutable.Set(1, 2, 3)
+    assertFalse(set add 2)
+    assertEquals(Set(1, 2, 3), set)
+    assertTrue(set add 4)
+    assertEquals(Set(1, 2, 3, 4), set)
+  }
+
+  /**
+    * xs -= x
+    * Removes element x from set xs as a side effect and returns xs itself
+    * xs -= (x, y, z)
+    * Removes the given elements from set xs as a side effect and returns xsitself
+    */
+  @Test
+  def test_-=(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4, 5)
+    assertEquals(Set(1, 2, 4, 5), set -= 3)
+    assertEquals(Set(1, 2, 4, 5), set)
+    //
+    assertEquals(Set(1, 4), set -= (2, 5))
+    assertEquals(Set(1, 4), set)
+  }
+
+  /**
+    * xs --= ys
+    * Removes all elements in ys from set xs as a side effect and returns xsitself
+    */
+  @Test
+  def test_--=(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4, 5)
+    assertEquals(Set(1, 4), set --= Set(2, 3, 5))
+    assertEquals(Set(1, 4), set)
+  }
+
+  /**
+    * xs remove x
+    * Removes element x from xs and returns true if x was previously contained in the set,
+    * false if it was not previously contained
+    */
+  @Test
+  def test_remove(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4, 5)
+    assertTrue(set remove 3)
+    assertEquals(Set(1, 2, 4, 5), set)
+    assertFalse(set remove 3)
+    assertEquals(Set(1, 2, 4, 5), set)
+  }
+
+  /**
+    * xs retain p
+    * Keeps only those elements in xs that satisfy predicate p
+    */
+  @Test
+  def test_retain(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4, 5)
+    assertEquals((), set retain (_ % 2 == 1))
+    assertEquals(Set(1, 3, 5), set)
+  }
+
+  /**
+    * xs.clear()
+    * Removes all elements from xs
+    */
+  @Test
+  def test_clear(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4, 5)
+    assertEquals((), set.clear())
+    assertEquals(Set(), set)
+  }
+
+  /**
+    * xs(x) = b
+    * xs.update(x, b)
+    * If boolean argument b is true, adds x toxs, otherwise removes x from xs
+    */
+  @Test
+  def test_update(): Unit = {
+    val set = mutable.Set(1, 2, 3, 4, 5)
+    assertEquals((), set(3) = false)
+    assertEquals(Set(1, 2, 4, 5), set)
+    assertEquals((), set(3) = true)
+    assertEquals(Set(1, 2, 3, 4, 5), set)
+  }
+
+  /**
+    * xs.clone
+    * A new mutable set with the same elements as xs
+    */
+  @Test
+  def test_clone(): Unit = {
+    val set = mutable.Set(1, 2, 3)
+    val set2 = set.clone
+    set.clear()
+    assertEquals(Set(), set)
+    assertEquals(Set(1, 2, 3), set2)
+  }
+
+}
+
+class MapTest {
+
+  /**
+    * ms get k
+    * The value associated with key k in map ms as an option, or None if not found
+    */
+  @Test
+  def test_get(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    assertEquals(Some("London"), map get "UK")
+    assertEquals(None, map get "Japan")
+  }
+
+  /**
+    * ms(k)
+    * ms apply k
+    * The value associated with key k in map ms, or a thrown exception if not found
+    */
+  @Test
+  def test_apply(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    assertEquals("London", map("UK"))
+    breakable {
+      try map apply "Japan"
+      catch {
+        case _ => return
+      }
+    }
+    assertTrue(false)
+  }
+
+  /**
+    * ms getOrElse (k, d)
+    * The value associated with key k in map ms, or the default value dif not found
+    */
+  @Test
+  def test_getOrElse(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    assertEquals("London", map getOrElse("UK", ()))
+    assertEquals((), map getOrElse("Japan", ()))
+  }
+
+  /**
+    * ms contains k
+    * ms isDefinedAt k
+    * Tests whether ms contains a mapping for key k
+    */
+  @Test
+  def test_contains(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    assertTrue(map contains "China")
+    assertFalse(map isDefinedAt "Italy")
+  }
+
+  /**
+    * ms + (k -> v)
+    * ms updated (k, v)
+    * The map containing all mappings of ms as well as the mappingk -> v from key k to value v
+    * ms + (k -> v, l -> w)
+    * The map containing all mappings of ms as well as the given key/value pairs
+    */
+  @Test
+  def test_+(): Unit = {
+    val map = Map("China" -> "Peking")
+    val map2 = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington")
+    assertEquals(map, map + ("China" -> "Peking"))
+    assertEquals(map, map updated("China", "Peking"))
+    assertEquals(map2, map + ("USA" -> "Washington"))
+    val map3 = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    assertEquals(map3, map2 + ("UK" -> "London", "Russia" -> "Moscow", "France" -> "Paris"))
+    assertEquals(map3, map2 + ("USA" -> "Washington", "UK" -> "London", "Russia" -> "Moscow", "France" -> "Paris"))
+  }
+
+  /**
+    * ms ++ kvs
+    * The map containing all mappings of ms as well as all key/value pairs of kvs
+    */
+  @Test
+  def test_++(): Unit = {
+    val map = Map("China" -> "Peking", "USA" -> "Washington")
+    val map2 = Map(
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    val map3 = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    assertEquals(map3, map ++ map2)
+  }
+
+  /**
+    * ms - k
+    * The map containing all mappings of ms except for any mapping of key k
+    * ms - (k, l, m)
+    * The map containing all mappings of ms except for any mapping with the given keys
+    */
+  @Test
+  def test_-(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    val map2 = Map(
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    val map3 = Map("France" -> "Paris")
+    assertEquals(map2, map - "China")
+    assertEquals(map, map - "Japan")
+    assertEquals(map3, map2 - ("USA", "UK", "Russia"))
+    assertEquals(map3, map2 - ("Japan", "USA", "UK", "Russia"))
+  }
+
+  /**
+    * ms -- ks
+    * The map containing all mappings of ms except for any mapping with a key in ks
+    */
+  @Test
+  def test_--(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    val map2 = Map("France" -> "Paris")
+    assertEquals(map2, map -- Set("China", "USA", "UK", "Russia"))
+    assertEquals(map2, map -- Set("Japan", "USA", "UK", "Russia", "China"))
+  }
+
+  /**
+    * ms.keys
+    * An iterable containing each key in ms
+    * ms.keySet
+    * A set containing each key in ms
+    * ms.keysIterator
+    * An iterator yielding each key in ms
+    */
+  @Test
+  def test_keys(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    val kset = Set("China", "USA", "UK", "Russia", "France")
+    assertEquals(kset, (Set.empty[String] /: map.keys) (_ + _))
+    assertEquals(kset, (Set.empty[String] /: map.keysIterator) (_ + _))
+  }
+
+  /**
+    * ms.values
+    * An iterable containing each value associated with a key in ms
+    * ms.valuesIterator
+    * An iterator yielding each value associated with a key in ms
+    */
+  @Test
+  def test_values(): Unit = {
+    val map = Map(
+      "China" -> "Peking",
+      "USA" -> "Washington",
+      "UK" -> "London",
+      "Russia" -> "Moscow",
+      "France" -> "Paris")
+    val vset = Set("Peking", "Washington", "London", "Moscow", "Paris")
+    assertEquals(vset, (Set.empty[String] /: map.values) (_ + _))
+    assertEquals(vset, (Set.empty[String] /: map.valuesIterator) (_ + _))
   }
 
 }
