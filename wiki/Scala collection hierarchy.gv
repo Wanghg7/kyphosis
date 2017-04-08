@@ -1,0 +1,116 @@
+digraph {
+
+    overlap = false
+    edge [style=solid]
+    splines = true
+    rankdir = BT
+
+    subgraph "cluster:scala" {
+
+        label = "scala"
+        style = "dashed"
+
+        subgraph "cluster:collection" {
+
+            label = "collection"
+            style = "dashed"
+
+            "scala.collection.AbstractTraversable"              [shape=box,label="AbstractTraversable"]
+            "scala.collection.AbstractIterable"                 [shape=box,label="AbstractIterable"]
+            "scala.collection.AbstractMap"                      [shape=box,label="AbstractMap"]
+
+            subgraph "cluster:mutable" {
+
+                label = "mutable"
+                style = "dashed"
+
+                "scala.collection.mutable.AbstractIterable"             [shape=box,label="AbstractIterable"]
+                "scala.collection.mutable.AbstractSet"                  [shape=box,label="AbstractSet"]
+                "scala.collection.mutable.AbstractSortedSet"            [shape=box,label="AbstractSortedSet"]
+                "scala.collection.mutable.TreeSet"                      [shape=box,label="TreeSet"]
+                "scala.collection.mutable.BitSet"                       [shape=box,label="BitSet"]
+                "scala.collection.mutable.HashSet"                      [shape=box,label="HashSet"]
+                "scala.collection.mutable.ImmutableSetAdaptor"          [shape=box,label="ImmutableSetAdaptor"]
+                "scala.collection.mutable.LinkedHashSet"                [shape=box,label="LinkedHashSet"]
+                "scala.collection.mutable.History"                      [shape=box,label="History"]
+                "scala.collection.mutable.RevertibleHistory"            [shape=box,label="RevertibleHistory"]
+                "scala.collection.mutable.PriorityQueue"                [shape=box,label="PriorityQueue"]
+                "scala.collection.mutable.PriorityQueueProxy"           [shape=box,label="PriorityQueueProxy"]
+                "scala.collection.mutable.SynchronizedPriorityQueue"    [shape=box,label="SynchronizedPriorityQueue"]
+                "scala.collection.mutable.AbstractMap"                  [shape=box,label="AbstractMap"]
+                "scala.collection.mutable.AbstractSortedMap"            [shape=box,label="AbstractSortedMap"]
+                "scala.collection.mutable.TreeMap"                      [shape=box,label="TreeMap"]
+                "scala.collection.mutable.AnyRefMap"                    [shape=box,label="AnyRefMap"]
+                "scala.collection.mutable.HashMap"                      [shape=box,label="HashMap"]
+                "scala.collection.mutable.ImmutableMapAdaptor"          [shape=box,label="ImmutableMapAdaptor"]
+                "scala.collection.mutable.WeakHashMap"                  [shape=box,label="WeakHashMap"]
+                "scala.collection.mutable.LinkedHashMap"                [shape=box,label="LinkedHashMap"]
+
+                "scala.collection.mutable.AbstractSet"                  -> "scala.collection.mutable.AbstractIterable"
+                "scala.collection.mutable.AbstractSortedSet"            -> "scala.collection.mutable.AbstractSet"
+                "scala.collection.mutable.TreeSet"                      -> "scala.collection.mutable.AbstractSortedSet"
+                "scala.collection.mutable.BitSet"                       -> "scala.collection.mutable.AbstractSet"
+                "scala.collection.mutable.HashSet"                      -> "scala.collection.mutable.AbstractSet"
+                "scala.collection.mutable.ImmutableSetAdaptor"          -> "scala.collection.mutable.AbstractSet"
+                "scala.collection.mutable.LinkedHashSet"                -> "scala.collection.mutable.AbstractSet"
+                "scala.collection.mutable.History"                      -> "scala.collection.mutable.AbstractIterable"
+                "scala.collection.mutable.RevertibleHistory"            -> "scala.collection.mutable.History"
+                "scala.collection.mutable.PriorityQueue"                -> "scala.collection.mutable.AbstractIterable"
+                "scala.collection.mutable.PriorityQueueProxy"           -> "scala.collection.mutable.PriorityQueue"
+                "scala.collection.mutable.SynchronizedPriorityQueue"    -> "scala.collection.mutable.PriorityQueue"
+                "scala.collection.mutable.AbstractSortedMap"            -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.TreeMap"                      -> "scala.collection.mutable.AbstractSortedMap"
+                "scala.collection.mutable.AnyRefMap"                    -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.HashMap"                      -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.ImmutableMapAdaptor"          -> "scala.collection.mutable.AbstractMap"
+                "scala.collection.mutable.LinkedHashMap"                -> "scala.collection.mutable.AbstractMap"
+            }
+
+            subgraph "cluster:convert" {
+
+                label = "convert"
+                style = "dashed"
+
+                "scala.collection.convert.Wrappers.JSetWrapper"             [shape=box,label="JSetWrapper"]
+                "scala.collection.convert.Wrappers.JConcurrentMapWrapper"   [shape=box,label="JConcurrentMapWrapper"]
+                "scala.collection.convert.Wrappers.JDictionaryWrapper"      [shape=box,label="JDictionaryWrapper"]
+                "scala.collection.convert.Wrappers.JMapWrapper"             [shape=box,label="JMapWrapper"]
+                "scala.collection.convert.Wrappers.JPropertiesWrapper"      [shape=box,label="JPropertiesWrapper"]
+
+            }
+
+            subgraph "cluster:immutable" {
+
+                label = "immutable"
+                style = "dashed"
+
+                "scala.collection.immutable.AbstractMap"        [shape=box,label="AbstractMap"]
+                "scala.collection.immutable.HashMap"            [shape=box,label="HashMap"]
+                "scala.collection.immutable.IntMap"             [shape=box,label="IntMap"]
+                "scala.collection.immutable.ListMap"            [shape=box,label="ListMap"]
+                "scala.collection.immutable.LongMap"            [shape=box,label="LongMap"]
+
+                "scala.collection.immutable.HashMap"            -> "scala.collection.immutable.AbstractMap"
+                "scala.collection.immutable.IntMap"             -> "scala.collection.immutable.AbstractMap"
+                "scala.collection.immutable.ListMap"            -> "scala.collection.immutable.AbstractMap"
+                "scala.collection.immutable.LongMap"            -> "scala.collection.immutable.AbstractMap"
+
+            }
+
+            "scala.collection.AbstractIterable"                         -> "scala.collection.AbstractTraversable"
+            "scala.collection.mutable.AbstractIterable"                 -> "scala.collection.AbstractIterable"
+            "scala.collection.convert.Wrappers.JSetWrapper"             -> "scala.collection.mutable.AbstractSet"
+            "scala.collection.AbstractMap"                              -> "scala.collection.AbstractIterable"
+            "scala.collection.immutable.AbstractMap"                    -> "scala.collection.AbstractMap"
+            "scala.collection.mutable.AbstractMap"                      -> "scala.collection.AbstractMap"
+            "scala.collection.convert.Wrappers.JConcurrentMapWrapper"   -> "scala.collection.mutable.AbstractMap"
+            "scala.collection.convert.Wrappers.JDictionaryWrapper"      -> "scala.collection.mutable.AbstractMap"
+            "scala.collection.convert.Wrappers.JMapWrapper"             -> "scala.collection.mutable.AbstractMap"
+            "scala.collection.mutable.WeakHashMap"                      -> "scala.collection.convert.Wrappers.JMapWrapper"
+            "scala.collection.convert.Wrappers.JPropertiesWrapper"      -> "scala.collection.mutable.AbstractMap"
+
+        }
+
+    }
+
+}
