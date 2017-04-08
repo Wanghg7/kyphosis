@@ -25,6 +25,13 @@ digraph {
             "scala.collection.AbstractMap"                      [shape=box,label="AbstractMap"]
             "scala.collection.AbstractSeq"                      [shape=box,label="AbstractSeq"]
             "scala.collection.AbstractSet"                      [shape=box,label="AbstractSet"]
+            "scala.collection.Traversable"                      [shape=ellipse,label="Traversable"]
+            "scala.collection.GenTraversable"                   [shape=ellipse,label="GenTraversable"]
+            "scala.collection.GenTraversableLike"               [shape=ellipse,label="GenTraversableLike"]
+            "scala.collection.GenTraversableOnce"               [shape=ellipse,label="GenTraversableOnce"]
+            "scala.collection.Parallelizable"                   [shape=ellipse,label="Parallelizable"]
+            "scala.collection.TraversableLike"                  [shape=ellipse,label="TraversableLike"]
+            "scala.collection.TraversableOnce"                  [shape=ellipse,label="TraversableOnce"]
 
             subgraph "cluster:mutable" {
 
@@ -68,10 +75,10 @@ digraph {
                 "scala.collection.mutable.LinkedList"                   [shape=box,label="LinkedList"]
                 "scala.collection.mutable.MutableList"                  [shape=box,label="MutableList"]
                 "scala.collection.mutable.Queue"                        [shape=box,label="Queue"]
-                "scala.collection.mutable.QueueProxy"                   [shape=component,label="QueueProxy"]
+                "scala.collection.mutable.QueueProxy"                   [shape=ellipse,label="QueueProxy"]
                 "scala.collection.mutable.SynchronizedQueue"            [shape=box,label="SynchronizedQueue"]
                 "scala.collection.mutable.Stack"                        [shape=box,label="Stack"]
-                "scala.collection.mutable.StackProxy"                   [shape=component,label="StackProxy"]
+                "scala.collection.mutable.StackProxy"                   [shape=ellipse,label="StackProxy"]
                 "scala.collection.mutable.SynchronizedStack"            [shape=box,label="SynchronizedStack"]
                 "scala.collection.mutable.StringBuilder"                [shape=box,label="StringBuilder"]
                 "scala.collection.mutable.WrappedArray"                 [shape=box,label="WrappedArray"]
@@ -108,10 +115,10 @@ digraph {
                 "scala.collection.mutable.LinkedList"                   -> "scala.collection.mutable.AbstractSeq"
                 "scala.collection.mutable.MutableList"                  -> "scala.collection.mutable.AbstractSeq"
                 "scala.collection.mutable.Queue"                        -> "scala.collection.mutable.MutableList"
-                "scala.collection.mutable.QueueProxy"                   -> "scala.collection.mutable.Queue"
+                "scala.collection.mutable.QueueProxy"                   -> "scala.collection.mutable.Queue" [style=dashed]
                 "scala.collection.mutable.SynchronizedQueue"            -> "scala.collection.mutable.Queue"
                 "scala.collection.mutable.Stack"                        -> "scala.collection.mutable.AbstractSeq"
-                "scala.collection.mutable.StackProxy"                   -> "scala.collection.mutable.Stack"
+                "scala.collection.mutable.StackProxy"                   -> "scala.collection.mutable.Stack" [style=dashed]
                 "scala.collection.mutable.SynchronizedStack"            -> "scala.collection.mutable.Stack"
                 "scala.collection.mutable.StringBuilder"                -> "scala.collection.mutable.AbstractSeq"
                 "scala.collection.mutable.WrappedArray"                 -> "scala.collection.mutable.AbstractSeq"
@@ -194,6 +201,18 @@ digraph {
 
             }
 
+            subgraph "cluster:generic" {
+
+                label = "generic"
+                style = "dashed"
+                node [fontcolor=white,style=filled,fillcolor="#5841F4"]
+
+                "scala.collection.generic.GenericTraversableTemplate"        [shape=ellipse,label="GenericTraversableTemplate"]
+                "scala.collection.generic.HasNewBuilder"                     [shape=ellipse,label="HasNewBuilder"]
+                "scala.collection.generic.FilterMonadic"                     [shape=ellipse,label="FilterMonadic"]
+
+            }
+
             "scala.collection.AbstractIterable"                         -> "scala.collection.AbstractTraversable"
             "scala.collection.mutable.AbstractIterable"                 -> "scala.collection.AbstractIterable"
             "scala.collection.convert.Wrappers.JSetWrapper"             -> "scala.collection.mutable.AbstractSet"
@@ -226,7 +245,23 @@ digraph {
             "scala.collection.immutable.ListSet"                        -> "scala.collection.AbstractSet"
             "scala.collection.convert.Wrappers.JCollectionWrapper"      -> "scala.collection.AbstractIterable"
             "scala.collection.convert.Wrappers.JIterableWrapper"        -> "scala.collection.AbstractIterable"
-
+            "scala.collection.AbstractTraversable"                      -> "scala.collection.Traversable" [style=dashed]
+            "scala.collection.Traversable"                              -> "scala.collection.generic.GenericTraversableTemplate" [style=dashed]
+            "scala.collection.generic.GenericTraversableTemplate"       -> "scala.collection.generic.HasNewBuilder" [style=dashed]
+            "scala.collection.Traversable"                              -> "scala.collection.GenTraversable" [style=dashed]
+            "scala.collection.GenTraversable"                           -> "scala.collection.generic.GenericTraversableTemplate"  [style=dashed]
+            "scala.collection.GenTraversable"                           -> "scala.collection.GenTraversableLike" [style=dashed]
+            "scala.collection.GenTraversableLike"                       -> "scala.collection.GenTraversableOnce" [style=dashed]
+            "scala.collection.GenTraversableLike"                       -> "scala.collection.Parallelizable" [style=dashed]
+            "scala.collection.GenTraversable"                           -> "scala.collection.GenTraversableOnce" [style=dashed]
+            "scala.collection.Traversable"                              -> "scala.collection.TraversableLike" [style=dashed]
+            "scala.collection.TraversableLike"                          -> "scala.collection.generic.FilterMonadic" [style=dashed]
+            "scala.collection.TraversableLike"                          -> "scala.collection.GenTraversableLike" [style=dashed]
+            "scala.collection.TraversableLike"                          -> "scala.collection.generic.HasNewBuilder" [style=dashed]
+            "scala.collection.TraversableLike"                          -> "scala.collection.Parallelizable" [style=dashed]
+            "scala.collection.TraversableLike"                          -> "scala.collection.TraversableOnce" [style=dashed]
+            "scala.collection.TraversableOnce"                          -> "scala.collection.GenTraversableOnce" [style=dashed]
+            "scala.collection.Traversable"                              -> "scala.collection.TraversableOnce" [style=dashed]
         }
 
 
