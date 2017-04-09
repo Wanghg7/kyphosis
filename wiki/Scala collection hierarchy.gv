@@ -13,6 +13,7 @@ digraph {
         node [fontcolor=black,style=solid,color=black]
 
         "scala.ValueSet"              [shape=box,label="ValueSet"]
+        "scala.Equals"                [shape=box,label="Equals"]
 
         subgraph "cluster:collection" {
 
@@ -21,21 +22,24 @@ digraph {
             node [fontcolor=white,style=filled,color=black,fillcolor="#000000"]
 
             "scala.collection.AbstractTraversable"              [shape=box,label="AbstractTraversable"]
-            "scala.collection.AbstractIterable"                 [shape=box,label="AbstractIterable"]
+            "scala.collection.AbstractIterable"                 [shape=box,label="AbstractIterable",margin=1]
             "scala.collection.AbstractMap"                      [shape=box,label="AbstractMap"]
-            "scala.collection.AbstractSeq"                      [shape=box,label="AbstractSeq"]
-            "scala.collection.AbstractSet"                      [shape=box,label="AbstractSet"]
-            "scala.collection.Traversable"                      [shape=ellipse,label="Traversable"]
-            "scala.collection.GenTraversable"                   [shape=ellipse,label="GenTraversable"]
-            "scala.collection.GenTraversableLike"               [shape=ellipse,label="GenTraversableLike"]
-            "scala.collection.GenTraversableOnce"               [shape=ellipse,label="GenTraversableOnce"]
-            "scala.collection.Parallelizable"                   [shape=ellipse,label="Parallelizable"]
-            "scala.collection.TraversableLike"                  [shape=ellipse,label="TraversableLike"]
-            "scala.collection.TraversableOnce"                  [shape=ellipse,label="TraversableOnce"]
-            "scala.collection.Iterable"                         [shape=ellipse,label="Iterable"]
-            "scala.collection.GenIterable"                      [shape=ellipse,label="GenIterable"]
-            "scala.collection.GenIterableLike"                  [shape=ellipse,label="GenIterableLike"]
-            "scala.collection.IterableLike"                     [shape=ellipse,label="IterableLike"]
+            "scala.collection.AbstractSeq"                      [shape=box,label="AbstractSeq",margin=1]
+            "scala.collection.AbstractSet"                      [shape=box,label="AbstractSet",margin=1]
+            "scala.collection.Traversable"                      [shape=circle,label="Traversable"]
+            "scala.collection.GenTraversable"                   [shape=circle,label="GenTraversable"]
+            "scala.collection.GenTraversableLike"               [shape=circle,label="GenTraversableLike"]
+            "scala.collection.GenTraversableOnce"               [shape=circle,label="GenTraversableOnce"]
+            "scala.collection.Parallelizable"                   [shape=circle,label="Parallelizable"]
+            "scala.collection.TraversableLike"                  [shape=circle,label="TraversableLike"]
+            "scala.collection.TraversableOnce"                  [shape=circle,label="TraversableOnce"]
+            "scala.collection.Iterable"                         [shape=circle,label="Iterable"]
+            "scala.collection.GenIterable"                      [shape=circle,label="GenIterable"]
+            "scala.collection.GenIterableLike"                  [shape=circle,label="GenIterableLike"]
+            "scala.collection.IterableLike"                     [shape=circle,label="IterableLike"]
+            "scala.collection.Seq"                              [shape=circle,label="Seq"]
+            "scala.collection.GenSeq"                           [shape=circle,label="GenSeq"]
+            "scala.collection.GenSeqLike"                       [shape=circle,label="GenSeqLike"]
 
             subgraph "cluster:mutable" {
 
@@ -43,8 +47,8 @@ digraph {
                 style = "dashed"
                 node [fontcolor=black,style=filled,fillcolor="#F47142"]
 
-                "scala.collection.mutable.AbstractIterable"             [shape=box,label="AbstractIterable"]
-                "scala.collection.mutable.AbstractSet"                  [shape=box,label="AbstractSet"]
+                "scala.collection.mutable.AbstractIterable"             [shape=box,label="AbstractIterable",margin=0.5]
+                "scala.collection.mutable.AbstractSet"                  [shape=box,label="AbstractSet",margin=1.3]
                 "scala.collection.mutable.AbstractSortedSet"            [shape=box,label="AbstractSortedSet"]
                 "scala.collection.mutable.TreeSet"                      [shape=box,label="TreeSet"]
                 "scala.collection.mutable.BitSet"                       [shape=box,label="BitSet"]
@@ -56,7 +60,7 @@ digraph {
                 "scala.collection.mutable.PriorityQueue"                [shape=box,label="PriorityQueue"]
                 "scala.collection.mutable.PriorityQueueProxy"           [shape=box,label="PriorityQueueProxy"]
                 "scala.collection.mutable.SynchronizedPriorityQueue"    [shape=box,label="SynchronizedPriorityQueue"]
-                "scala.collection.mutable.AbstractMap"                  [shape=box,label="AbstractMap"]
+                "scala.collection.mutable.AbstractMap"                  [shape=box,label="AbstractMap",margin=1.5]
                 "scala.collection.mutable.AbstractSortedMap"            [shape=box,label="AbstractSortedMap"]
                 "scala.collection.mutable.TreeMap"                      [shape=box,label="TreeMap"]
                 "scala.collection.mutable.AnyRefMap"                    [shape=box,label="AnyRefMap"]
@@ -67,8 +71,8 @@ digraph {
                 "scala.collection.mutable.ListMap"                      [shape=box,label="ListMap"]
                 "scala.collection.mutable.LongMap"                      [shape=box,label="LongMap"]
                 "scala.collection.mutable.OpenHashMap"                  [shape=box,label="OpenHashMap"]
-                "scala.collection.mutable.AbstractSeq"                  [shape=box,label="AbstractSeq"]
-                "scala.collection.mutable.AbstractBuffer"               [shape=box,label="AbstractBuffer"]
+                "scala.collection.mutable.AbstractSeq"                  [shape=box,label="AbstractSeq",margin=1.5]
+                "scala.collection.mutable.AbstractBuffer"               [shape=box,label="AbstractBuffer",margin=0.5]
                 "scala.collection.mutable.ArrayBuffer"                  [shape=box,label="ArrayBuffer"]
                 "scala.collection.mutable.ListBuffer"                   [shape=box,label="ListBuffer"]
                 "scala.collection.mutable.UnrolledBuffer"               [shape=box,label="UnrolledBuffer"]
@@ -79,10 +83,10 @@ digraph {
                 "scala.collection.mutable.LinkedList"                   [shape=box,label="LinkedList"]
                 "scala.collection.mutable.MutableList"                  [shape=box,label="MutableList"]
                 "scala.collection.mutable.Queue"                        [shape=box,label="Queue"]
-                "scala.collection.mutable.QueueProxy"                   [shape=ellipse,label="QueueProxy"]
+                "scala.collection.mutable.QueueProxy"                   [shape=circle,label="QueueProxy"]
                 "scala.collection.mutable.SynchronizedQueue"            [shape=box,label="SynchronizedQueue"]
                 "scala.collection.mutable.Stack"                        [shape=box,label="Stack"]
-                "scala.collection.mutable.StackProxy"                   [shape=ellipse,label="StackProxy"]
+                "scala.collection.mutable.StackProxy"                   [shape=circle,label="StackProxy"]
                 "scala.collection.mutable.SynchronizedStack"            [shape=box,label="SynchronizedStack"]
                 "scala.collection.mutable.StringBuilder"                [shape=box,label="StringBuilder"]
                 "scala.collection.mutable.WrappedArray"                 [shape=box,label="WrappedArray"]
@@ -126,6 +130,7 @@ digraph {
                 "scala.collection.mutable.SynchronizedStack"            -> "scala.collection.mutable.Stack"
                 "scala.collection.mutable.StringBuilder"                -> "scala.collection.mutable.AbstractSeq"
                 "scala.collection.mutable.WrappedArray"                 -> "scala.collection.mutable.AbstractSeq"
+                "scala.collection.AbstractSeq"                          -> "scala.collection.Seq" [style=dashed]
             }
 
             subgraph "cluster:convert" {
@@ -211,9 +216,9 @@ digraph {
                 style = "dashed"
                 node [fontcolor=white,style=filled,fillcolor="#5841F4"]
 
-                "scala.collection.generic.GenericTraversableTemplate"        [shape=ellipse,label="GenericTraversableTemplate"]
-                "scala.collection.generic.HasNewBuilder"                     [shape=ellipse,label="HasNewBuilder"]
-                "scala.collection.generic.FilterMonadic"                     [shape=ellipse,label="FilterMonadic"]
+                "scala.collection.generic.GenericTraversableTemplate"        [shape=circle,label="GenericTraversableTemplate"]
+                "scala.collection.generic.HasNewBuilder"                     [shape=circle,label="HasNewBuilder"]
+                "scala.collection.generic.FilterMonadic"                     [shape=circle,label="FilterMonadic"]
 
             }
 
@@ -272,6 +277,18 @@ digraph {
             "scala.collection.GenIterable"                              -> "scala.collection.GenIterableLike" [style=dashed]
             "scala.collection.GenIterable"                              -> "scala.collection.GenTraversable" [style=dashed]
             "scala.collection.Iterable"                                 -> "scala.collection.IterableLike" [style=dashed]
+            "scala.collection.IterableLike"                             -> "scala.collection.GenIterableLike" [style=dashed]
+            "scala.collection.GenIterableLike"                          -> "scala.collection.GenTraversableLike" [style=dashed]
+            "scala.collection.IterableLike"                             -> "scala.collection.TraversableLike" [style=dashed]
+            "scala.collection.Iterable"                                 -> "scala.collection.Traversable" [style=dashed]
+            "scala.collection.Seq"                                      -> "scala.collection.generic.GenericTraversableTemplate"  [style=dashed]
+            "scala.collection.Seq"                                      -> "scala.collection.GenSeq" [style=dashed]
+            "scala.collection.GenSeq"                                   -> "scala.collection.GenIterable"  [style=dashed]
+            "scala.collection.GenSeq"                                   -> "scala.collection.GenSeqLike" [style=dashed]
+            "scala.collection.GenSeqLike"                               -> "scala.collection.GenIterableLike" [style=dashed]
+            "scala.collection.GenSeqLike"                               -> "scala.collection.Parallelizable" [style=dashed]
+            "scala.collection.Seq"                                      -> "scala.collection.Iterable" [style=dashed]
+            "scala.collection.AbstractIterable"                         -> "scala.collection.Iterable" [style=dashed]
 
         }
 
@@ -287,6 +304,9 @@ digraph {
 
         "scala.sys.SystemProperties"            -> "scala.collection.mutable.AbstractMap"
         "scala.ValueSet"                        -> "scala.collection.AbstractSet"
+        "scala.collection.IterableLike"         -> "scala.Equals" [style=dashed]
+        "scala.collection.GenSeq"               -> "scala.Equals" [style=dashed]
+        "scala.collection.GenSeqLike"           -> "scala.Equals" [style=dashed]
 
     }
 
