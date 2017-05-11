@@ -37,9 +37,14 @@ vi .bashrc
 alias yum='yum --noplugins --disablerepo=* --enablerepo=c7-media'
 alias sudo='sudo '
 
-yum install pptp
-modprobe nf_conntrack_pptp
-echo 'admin PPTP 00000000 *' >> /etc/ppp/chap-secrets
+Connection name:                linuxconfig ( can be any descriptive name )
+VPN connetion type:             PPTP
+PPTP VPN server IP or domain:   123.123.1.1
+CHAP Username:                  admin
+CHAP User password:             00000000
+# yum install pptp
+# modprobe nf_conntrack_pptp
+# echo 'admin PPTP 00000000 *' >> /etc/ppp/chap-secrets
 /etc/ppp/peers/linuxconfig
     pty "pptp 123.123.1.1 --nolaunchpppd"
     name admin
@@ -47,9 +52,10 @@ echo 'admin PPTP 00000000 *' >> /etc/ppp/chap-secrets
     require-mppe-128
     file /etc/ppp/options.pptp
     ipparam linuxconfig
-pppd call linuxconfig
+# pppd call linuxconfig
 /var/log/messages
-pkill pppd
+# pkill pppd
+
 net-tools
 sudo route add -net 0.0.0.0 dev ppp0
 sudo route del -net 0.0.0.0 dev ppp0
