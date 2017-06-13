@@ -462,3 +462,330 @@
             (null? '(1 2))    ⇒   #f
             (null? '())       ⇒   #t
 
+*   由此可以看出`atom?`确实可以基于`pair?`和`null?`定义
+
+        (define atom?
+          (lambda (x)
+              (and (not (pair? x)) (not (null? x)))))   ⇒
+        (atom? 'a)                                      ⇒   #t
+        (atom? '())                                     ⇒   #f
+        (atom? 22)                                      ⇒   #t
+        (atom? 6/9)                                     ⇒   #t
+        (atom? '(1 . 2))                                ⇒   #f
+
+#### 2.2.4 Conversions between data types ####
+
+*   many procedures for converting among the data types
+
+*   convert between the character cases using `char-downcase` and `char-upcase`
+
+        (char-downcase #\A) ⇒   #\a
+        (char-upcase #\t)   ⇒   #\T
+
+*   characters can be converted into integers using `char->integer`
+    *   and vice versa, `integer->char`
+
+            (char->integer #\A) ⇒   65
+            (integer->char 32)  ⇒   #\space
+
+*   strings can be converted into the corresponding list of characters
+
+        (string->list "already")  ⇒   '(#\a #\l #\r #\e #\a #\d #\y)
+
+*   other conversion procedures in the same vein
+    *   `list->string`
+    *   `vector->list`
+    *   `list->vector`
+
+*   vein
+    *   英[veɪn]
+    *   美[veɪn]
+    *   n. 静脉；纹理；叶脉；岩脉
+    *   vt. 使有脉络；用脉络装饰
+
+*   in the same vein
+    *   同样（情趣、口气、心态）的
+
+*   numbers can be converted to strings
+
+        (number->string 13)     ⇒   "13"
+        (number->string 13.)    ⇒   "13.0"
+        (number->string 13/26)  ⇒   "1/2"
+        (number->string 1+0i)   ⇒   "1"
+        (number->string 0+1i)   ⇒   "0+1i"
+
+*   and strings to numbers
+
+        (string->number "9/15")             ⇒   3/5
+        (string->number "9i")               ⇒   #f
+        (string->number "-9i")              ⇒   0-9i
+        (string->number "i am a number")    ⇒   #f
+
+*   `string->number` takes an optional second argument, the radix
+
+        (string->number "cafebabe" 16)      ⇒ 3405691582
+        (string->number "110" 2)            ⇒ 6
+
+*   symbols can be converted to strings, and vice versa
+
+        (string->symbol "green")    ⇒   'green
+        (symbol->string 'brown)     ⇒   "brown"
+
+*   `0xcafebabe = 3405691582`引起了我的注意
+    *   还以为是0-9不重复
+    *   想写一个scheme程序遍历16进制数
+        *   1-8位
+        *   仅有字母构成
+        *   对应的10进制数位不重复，从0开始
+        *   符合发音规则
+
+### 2.3 Other data types ###
+
+*   other data types
+
+*   __procedure__
+    *   `display`
+    *   `+`
+    *   `cons`
+*   variables holding the procedure values
+*   not visible as are numbers or characters
+
+        display   ⇒     #<procedure:display>
+        +         ⇒     #<procedure:+>
+        cons      ⇒     #<procedure:cons>
+
+*   __primitive__ procedures
+    *   with standard global variables holding them
+
+*   __port__
+    *   the conduit through which input and output is performed
+    *   usually associated with files and consoles
+
+*   __display__ can take two arguments
+    *   one the value to be displayed
+    *   the other the output port it should be displayed on
+    *   second argument was implicit
+        *   the default output port used is the standard output port
+
+*   the procedure-call __(current‑output‑port)__
+    *   the current standard output port
+
+            (display "hello, love" (current-output-port))   ⇒  hello, love
+
+*   conduit　
+    *   英['kɒndɪt]
+    *   美['kɒndʊɪt]
+    *   n. 导管；水管；沟渠
+
+### 2.4 S-expressions ###
+
+*   all the data types
+*   can be lumped together
+*   a single all-encompassing data type called the s-expression
+    *   s for symbolic
+
+*   lump
+    *   英[lʌmp]
+    *   美[lʌmp]
+    *   n. 块；团；笨重的人；瘤
+    *   v. 使成块；形成团状；归并；(笨重地)移动
+
+*   lump into　
+    *   把…归在一起
+
+*   encompass
+    *   英[ɪn'kʌmpəs]
+    *   美[ɪn'kʌmpəs]
+    *   vt. 围绕；包围；包括；完成
+
+*   all-encompassing　
+    *   adj. 包含所有的
+
+*   examples
+
+        42
+        #\c
+        (1 . 2)
+        #(a b c)
+        "Hello"
+        (quote xyz)
+        (string‑>number "16")
+        (begin (display "Hello, World!") (newline))
+
+## Chapter 3 Forms ##
+
+*   the Scheme example programs provided thus far
+    *   are also s-expressions
+
+*   is true of all Scheme programs
+    *   programs are data
+
+*   the character datum `#\c` is a program
+    *   or a form
+    *   the more general term __form__ instead of __program__
+
+*   the form `#\c` evaluates to the value `#\c`
+    *   `#\c` is self-evaluating
+
+*   not all s-expressions are self-evaluating
+    *   the symbol s-expression `xyz` evalautes to
+        *   the value held by the variable `xyz`
+    *   the list s-expression `(string->number "16")` evaluates to
+        *   the number 16
+
+*   not all s-expressions are valid programs
+    *   `(1 . 2)`
+
+*   evaluates a list form
+    *   by examing the __head__ of the form
+    *   evaluates to a procedure
+        *   the procedure is __applied__ to the arguments
+    *   is a __special form__
+        *   in a manner idiosyncratic to that form
+        *   `begin`
+            *   subforms to be evaluated in order
+        *   `define`
+            *   introduces and initializes a variable
+        *   `set!`
+            *   changes the binding of a variable
+
+*   idiosyncratic
+    *   英[ˌɪdiəsɪŋ'krætɪk]
+    *   美[ˌɪdiəsɪŋ'krætɪk]
+    *   adj. 特质的；与众不同的
+
+### 3.1 Procedures ###
+
+*   primitive Scheme procedures
+    *   `cons`
+    *   `string->list`
+
+*   users can create their own procedures
+    *   the special form __lambda__
+    *   the first subform is __the list of parameters__
+    *   the remaining subforms constitute __the procedure's body___
+
+*   evaluations
+
+        (lambda (x) (* x 2))        ⇒   #<procedure>
+        ((lambda (x) (* x 2)) 5)    ⇒   10
+
+*   we can use a variable to hold the procedure value
+    *   instead of
+        *   create a replica using lambda each time
+
+*   evaluations
+
+        (define mul2 (lambda (x) (* x 2)))  ⇒
+        (mul2 6)                            ⇒   12
+        (mul2 7)                            ⇒   14
+
+#### 3.1.1 Procedure parameters ####
+
+*   the parameters of a lambda-procedure
+    *   the first subform
+        *   the form immediately following the head
+
+*   unary-procedure
+    *   the singleton list (x)
+
+*   the symbol x acts as a variable
+    *   the variable is said to be __local__ to the procedure's body
+
+*   2-argument procedure example
+
+        (define area (lambda (length breadth) (* length breadth)))  ⇒
+        (area 3 4)                                                  ⇒   12
+        (define area2 *)                                            ⇒
+        (area2 3 4)                                                 ⇒   12
+        (area 3 4 5)                                                ⇒   ; area: arity mismatch;
+        (area2 3 4 5)                                               ⇒   60
+
+*   area multiples its arguments
+    *   so does the primitive procedure `*`
+
+#### 3.1.2 Variable number of arguments ####
+
+*   the lambda parameter list can be
+    *   a list of the form `(a ...)`
+
+            (define fn (lambda (a b c x) (length x)))   ⇒
+            (fn 'a 'b 'c '(1 2 3))                      ⇒   3
+            (fn 'a 'b 'c '(1 2 3 4 5 6 7))              ⇒   7
+    *   a symbol `x`
+
+            (define fn (lambda x (length x)))           ⇒
+            (fn 1 2 3 4)                                ⇒   4
+    *   a dotted pair of the form `(a ... . x)`
+
+            (define fn (lambda (a b c . x) (length x))) ⇒
+            (fn 1 2 3 4)                                ⇒   1
+            (fn 'a 'b 'c 1 2 3 4 5 6 7)                 ⇒   7
+
+### 3.2 apply ###
+
+*   the Scheme procedure `apply`
+    *   call a procedure on a list of its arguments
+
+*   evaluations
+
+        (apply + '(1 2 3 4))    ⇒   10
+        (apply + 1 2 '(3 4 5))  ⇒   15
+
+### 3.3 Sequencing ###
+
+*   the __begin__ special form
+    *   bunch together a group of subforms
+    *   to be evaluated in sequence
+
+*   implicit __begin__s
+    *   lambda-bodies are implicit __begin__s
+
+            (define do-in-seq
+              (lambda (task1 task2 task3)
+                (begin
+                  (display task1)
+                  (display task2)
+                  (display task3)
+                  (newline))))              ⇒
+            (do-in-seq 'a 'b 'c)            ⇒   abc
+
+            (define do-in-seq
+              (lambda (task1 task2 task3)
+                (display task1)
+                (display task2)
+                (display task3)
+                (newline)))                 ⇒
+            (do-in-seq 'x 'y 'z)            ⇒   xyz
+
+## Chapter 4 Conditionals ##
+
+*   Scheme provides __conditionals__
+    *   the basic form is the __if__
+
+            (define bonus 520)          ⇒
+            (if (= bonus 520)
+              (display "I love you")
+              (display "I hate you"))   ⇒   I love you
+
+            (define bonus 521)          ⇒
+            (if (= bonus 520)
+              (display "I love you")
+              (display "I hate you"))   ⇒   I hate you
+
+示例
+
+    (display (if #t 'good 'bad))    ⇒   good
+    (display (if #f 'good 'bad))    ⇒   bad
+    (display (if #f 'good))         ⇒   ; ... missing an "else" expression
+    (display (if '() 'good))        ⇒   ; ... missing an "else" expression
+    (display (if #t 'good))         ⇒   ; ... missing an "else" expression
+
+*   文中说else是可选的，但发现是强制的
+
+*   some other conditional forms for convenience
+    *   all be defined as macros
+        *   expand into if-expressions
+
+### 4.1 when and unless ###
+
