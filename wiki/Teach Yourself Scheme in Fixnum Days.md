@@ -789,3 +789,31 @@
 
 ### 4.1 when and unless ###
 
+*   when对应then子句
+*   unless对应else子句
+*   两者都隐含begin
+*   如果Scheme实现不提供，可以自己定义宏
+
+        (when #t (display 'hello) (display 'snow))      ⇒   hellosnow
+        (unless #t (display 'hello) (display 'snow))    ⇒
+        (unless #f (display 'hello) (display 'snow))    ⇒   hellosnow
+
+### 4.2 cond ###
+
+*   convenient for expressing nested if-expressions
+
+*   each else but the last
+    *   introduces a new if
+
+*   cond可以理解为
+
+        if ... then
+            ...
+        elif ... then
+            ...
+        elif ... then
+            ...
+        else
+            ...
+*   所以cond也是隐含begin
+
