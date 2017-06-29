@@ -36,6 +36,6 @@ object ByteBufferDemo {
     val pos = buf.position()
     val lim = buf.limit()
     val cap = buf.capacity()
-    String.format("pos: %4d, lim: %4d, cap: %4d", pos: Integer, lim: Integer, cap: Integer)
+    String.format("pos: %4d, lim: %10d, cap: %10d", pos: Integer, lim: Integer, cap: Integer)
   }
 }
